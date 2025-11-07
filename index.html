@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en-AU">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="SGT Infrastructure Consulting delivers expert project management and civil engineering services for major infrastructure projects across Queensland, Australia. Led by Simon Thomas RPEQ." />
+    <meta name="keywords" content="infrastructure consulting, project management, civil engineering, Queensland, RPEQ, Simon Thomas, major projects, construction management" />
+    <meta name="author" content="Simon Thomas, RPEQ" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#0A2463" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="%VITE_APP_LOGO%" />
+    <link rel="apple-touch-icon" href="%VITE_APP_LOGO%" />
+
+    <!-- Title -->
+    <title>%VITE_APP_TITLE%</title>
+
+    <!-- Performance: DNS prefetch for external domains -->
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+
+    <!-- Performance: Preconnect to critical origins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Performance: Preload critical hero image (above the fold) -->
+    <link rel="preload" as="image" href="/hero-infrastructure.webp" type="image/webp" />
+
+    <!-- Performance: Optimize font loading with display=swap -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    
+    <!-- Initialize dark mode immediately to prevent flash -->
+    <script>
+      // Force dark theme on load
+      (function() {
+        // Always force dark mode
+        localStorage.setItem('theme', 'dark');
+        document.documentElement.classList.remove('light');
+        document.documentElement.classList.add('dark');
+      })();
+    </script>
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <script
+      defer
+      src="%VITE_ANALYTICS_ENDPOINT%/umami"
+      data-website-id="%VITE_ANALYTICS_WEBSITE_ID%"></script>
+  </body>
+
+</html>
