@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { TrendingUp, Target, Award, Globe, Users, Lightbulb, CheckCircle } from "lucide-react";
+import { TrendingUp, Target, Award, Users, Lightbulb, CheckCircle } from "lucide-react";
 
 const careerPhases = [
   {

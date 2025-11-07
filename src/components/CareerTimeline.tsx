@@ -198,7 +198,7 @@ export default function CareerTimeline() {
           {/* Timeline line */}
           <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-0.5 bg-border" />
 
-          {timelineData.map((phase, phaseIndex) => (
+          {timelineData.map((phase) => (
             <div key={phase.phase} className="mb-16">
               {/* Phase Header */}
               <motion.div
