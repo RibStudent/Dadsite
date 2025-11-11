@@ -200,7 +200,7 @@ export default function Services() {
       </section>
 
       {/* Services Grid */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-background">
         <div className="container">
           <div className="grid md:grid-cols-2 gap-8">
             {services.map((service, index) => {
@@ -257,7 +257,7 @@ export default function Services() {
       </section>
 
       {/* Why Choose Us */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-background">
         <div className="container">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-4xl font-bold mb-12 text-center">Why Choose SGT Infrastructure</h2>
