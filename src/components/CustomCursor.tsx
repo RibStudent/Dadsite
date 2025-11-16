@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, useSpring, AnimatePresence } from 'framer-motion';
 import { usePrefersReducedMotion } from '@/hooks/useAnimations';
 
