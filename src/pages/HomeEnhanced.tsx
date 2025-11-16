@@ -1,10 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { CheckCircle2, ArrowRight } from "lucide-react";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { CompanyLogos } from "@/components/CompanyLogos";
 import SEO, { createLocalBusinessSchema, createOrganizationSchema, createPersonSchema } from "@/components/SEO";
 import { BackgroundBeams } from "@/components/ui/background-beams";
-import { HeroParallax } from "@/components/ui/hero-parallax";
+import { BackgroundPaths } from "@/components/ui/background-paths";
 import StatsCounter from "@/components/StatsCounter";
 import AchievementsSection from "@/components/AchievementsSection";
 import ProjectsShowcase from "@/components/ProjectsShowcase";
@@ -12,83 +12,7 @@ import ServicesGrid from "@/components/ServicesGrid";
 import "../home-animations.css";
 
 export default function HomeEnhanced() {
-  const projects = [
-    {
-      title: "Burdekin Falls Dam",
-      link: "/projects",
-      thumbnail: "/burdekin-dam-1.jpg",
-    },
-    {
-      title: "Gold Coast Light Rail",
-      link: "/projects",
-      thumbnail: "/gold-coast-light-rail.jpg",
-    },
-    {
-      title: "Inland Rail Programme",
-      link: "/projects",
-      thumbnail: "/inland-rail-project.jpg",
-    },
-    {
-      title: "Wiggins Island Coal Terminal",
-      link: "/projects",
-      thumbnail: "/wiggins-island-terminal.jpg",
-    },
-    {
-      title: "Dam Infrastructure Projects",
-      link: "/projects",
-      thumbnail: "/burdekin-dam-2.jpg",
-    },
-    {
-      title: "Inland Rail Development",
-      link: "/projects",
-      thumbnail: "/inland-rail-1.jpg",
-    },
-    {
-      title: "Carmichael Rail Project",
-      link: "/projects",
-      thumbnail: "/carmichael-rail.jpg",
-    },
-    {
-      title: "Houghton Highway Bridge",
-      link: "/projects",
-      thumbnail: "/houghton-highway-bridge.jpg",
-    },
-    {
-      title: "Sizewell B Nuclear Construction",
-      link: "/projects",
-      thumbnail: "/sizewell-b-construction.jpg",
-    },
-    {
-      title: "Sheikh Zayed Mosque",
-      link: "/projects",
-      thumbnail: "/sheikh-zayed-mosque-construction.jpg",
-    },
-    {
-      title: "Wiggins Terminal Development",
-      link: "/projects",
-      thumbnail: "/wiggins-terminal-1.jpg",
-    },
-    {
-      title: "Major Civil Engineering",
-      link: "/projects",
-      thumbnail: "/engineers-site.jpg",
-    },
-    {
-      title: "Sizewell Construction Phase 1",
-      link: "/projects",
-      thumbnail: "/sizewell-construction-1.jpg",
-    },
-    {
-      title: "Infrastructure Development",
-      link: "/projects",
-      thumbnail: "/project-construction.jpg",
-    },
-    {
-      title: "Bond University Lecture",
-      link: "/projects",
-      thumbnail: "/bond-university-lecture.jpg",
-    },
-  ];
+  const [, navigate] = useLocation();
 
   const stats = [
     { value: "35+", label: "Years Experience" },
@@ -127,33 +51,13 @@ export default function HomeEnhanced() {
         ]}
       />
 
-      {/* Hero Parallax - Main Hero Section */}
-      <HeroParallax
-        products={projects}
-        header={
-          <div className="max-w-7xl relative mx-auto py-20 md:py-40 px-4 w-full left-0 top-0" id="main-content">
-            <h1 className="text-2xl md:text-7xl font-bold text-foreground">
-              SGT Infrastructure <br /> Consulting
-            </h1>
-            <p className="max-w-2xl text-base md:text-xl mt-8 text-muted-foreground">
-              Delivering billion-dollar infrastructure projects across Queensland and Australia.
-              With over 35 years of senior-level expertise in dams, rail, transport, and major construction projects.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 mt-8">
-              <Link href="/contact">
-                <Button size="lg" variant="default" className="bg-primary hover:bg-primary/90 text-primary-foreground">
-                  Discuss Your Project
-                  <ArrowRight className="ml-2 h-5 w-5" aria-hidden="true" />
-                </Button>
-              </Link>
-              <Link href="/projects">
-                <Button size="lg" variant="outline">
-                  View Our Work
-                </Button>
-              </Link>
-            </div>
-          </div>
-        }
+      {/* Premium Animated Hero Section */}
+      <BackgroundPaths
+        title="SGT Infrastructure"
+        subtitle="Delivering billion-dollar infrastructure projects across Queensland and Australia with over 35 years of senior-level expertise in dams, rail, transport, and major construction projects."
+        ctaText="Discuss Your Project"
+        ctaLink="/contact"
+        onCtaClick={() => navigate('/contact')}
       />
 
       {/* Stats Bar */}
