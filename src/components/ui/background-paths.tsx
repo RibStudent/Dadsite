@@ -3,6 +3,10 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 
+/**
+ * FloatingPaths - Animated SVG paths for background effect
+ * @param position - Path position multiplier for symmetry
+ */
 function FloatingPaths({ position }: { position: number }) {
     const paths = Array.from({ length: 36 }, (_, i) => ({
         id: i,
