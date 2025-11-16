@@ -133,6 +133,32 @@
   * {
     @apply border-border outline-ring/50;
   }
+
+  /* Smooth theme transitions */
+  :root {
+    --theme-transition-duration: 200ms;
+  }
+
+  html {
+    transition: background-color var(--theme-transition-duration) ease-in-out;
+  }
+
+  * {
+    transition: background-color var(--theme-transition-duration) ease-in-out,
+                border-color var(--theme-transition-duration) ease-in-out,
+                color var(--theme-transition-duration) ease-in-out;
+  }
+
+  /* Respect users who prefer reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    *, ::before, ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
   body {
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     background-color: oklch(0.08 0.01 285);

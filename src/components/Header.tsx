@@ -3,11 +3,25 @@ import { Menu, X, Moon, Sun } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { useTheme } from "@/contexts/ThemeContext";
+import { motion, AnimatePresence } from "framer-motion";
+import { usePrefersReducedMotion } from "@/hooks/useAnimations";
 
+/**
+ * Enhanced Header with animated mobile menu
+ *
+ * Features:
+ * - Smooth mobile menu slide-in animation
+ * - Staggered menu item animations
+ * - Animated theme toggle
+ * - Backdrop blur effect
+ * - Keyboard navigation support
+ * - Respects reduced motion preference
+ */
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [location] = useLocation();
   const { theme, toggleTheme } = useTheme();
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   const navigation = [
     { name: "Home", href: "/" },
@@ -80,35 +94,59 @@ export default function Header() {
                 Get in Touch
               </Button>
             </Link>
-            <Button
-              size="sm"
-              variant="ghost"
-              onClick={toggleTheme}
-              aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-              className="ml-2"
-            >
-              {theme === "dark" ? (
-                <Sun className="h-4 w-4" />
-              ) : (
-                <Moon className="h-4 w-4" />
-              )}
-            </Button>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={toggleTheme}
+                aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+                className="ml-2"
+              >
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={theme}
+                    initial={{ y: -20, opacity: 0, rotate: -180 }}
+                    animate={{ y: 0, opacity: 1, rotate: 0 }}
+                    exit={{ y: 20, opacity: 0, rotate: 180 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    {theme === "dark" ? (
+                      <Sun className="h-4 w-4" />
+                    ) : (
+                      <Moon className="h-4 w-4" />
+                    )}
+                  </motion.div>
+                </AnimatePresence>
+              </Button>
+            </motion.div>
           </div>
 
           {/* Mobile menu button and theme toggle */}
           <div className="flex items-center space-x-2 md:hidden">
-            <Button
-              size="sm"
-              variant="ghost"
-              onClick={toggleTheme}
-              aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-            >
-              {theme === "dark" ? (
-                <Sun className="h-4 w-4" />
-              ) : (
-                <Moon className="h-4 w-4" />
-              )}
-            </Button>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={toggleTheme}
+                aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+              >
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={theme}
+                    initial={{ y: -20, opacity: 0, rotate: -180 }}
+                    animate={{ y: 0, opacity: 1, rotate: 0 }}
+                    exit={{ y: 20, opacity: 0, rotate: 180 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    {theme === "dark" ? (
+                      <Sun className="h-4 w-4" />
+                    ) : (
+                      <Moon className="h-4 w-4" />
+                    )}
+                  </motion.div>
+                </AnimatePresence>
+              </Button>
+            </motion.div>
             <button
               className="p-2 rounded-md hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -125,38 +163,110 @@ export default function Header() {
           </div>
         </nav>
 
-        {/* Mobile Navigation */}
-        {mobileMenuOpen && (
-          <div
-            id="mobile-menu"
-            className="md:hidden border-t border-border bg-background"
-            role="dialog"
-            aria-label="Mobile navigation menu"
-          >
-            <div className="container py-4 flex flex-col space-y-4">
-              {navigation.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className={`text-sm font-medium transition-colors hover:text-primary ${
-                    location === item.href
-                      ? "text-primary"
-                      : "text-foreground/70"
-                  }`}
-                  onClick={() => setMobileMenuOpen(false)}
-                  aria-current={location === item.href ? "page" : undefined}
+        {/* Mobile Navigation with animations */}
+        <AnimatePresence>
+          {mobileMenuOpen && (
+            <motion.div
+              id="mobile-menu"
+              className="md:hidden border-t border-border bg-background/95 backdrop-blur-md"
+              role="dialog"
+              aria-label="Mobile navigation menu"
+              initial={prefersReducedMotion ? {} : { height: 0, opacity: 0 }}
+              animate={prefersReducedMotion ? {} : { height: "auto", opacity: 1 }}
+              exit={prefersReducedMotion ? {} : { height: 0, opacity: 0 }}
+              transition={{
+                duration: 0.3,
+                ease: [0.25, 0.4, 0.25, 1],
+              }}
+            >
+              <motion.div
+                className="container py-4 flex flex-col space-y-4 overflow-hidden"
+                initial={prefersReducedMotion ? {} : "closed"}
+                animate={prefersReducedMotion ? {} : "open"}
+                exit={prefersReducedMotion ? {} : "closed"}
+                variants={
+                  prefersReducedMotion
+                    ? {}
+                    : {
+                        open: {
+                          transition: { staggerChildren: 0.07, delayChildren: 0.1 },
+                        },
+                        closed: {
+                          transition: { staggerChildren: 0.05, staggerDirection: -1 },
+                        },
+                      }
+                }
+              >
+                {navigation.map((item) => (
+                  <motion.div
+                    key={item.name}
+                    variants={
+                      prefersReducedMotion
+                        ? {}
+                        : {
+                            open: {
+                              y: 0,
+                              opacity: 1,
+                              transition: {
+                                y: { stiffness: 1000, velocity: -100 },
+                              },
+                            },
+                            closed: {
+                              y: 20,
+                              opacity: 0,
+                              transition: {
+                                y: { stiffness: 1000 },
+                              },
+                            },
+                          }
+                    }
+                  >
+                    <Link
+                      href={item.href}
+                      className={`text-sm font-medium transition-colors hover:text-primary block ${
+                        location === item.href
+                          ? "text-primary"
+                          : "text-foreground/70"
+                      }`}
+                      onClick={() => setMobileMenuOpen(false)}
+                      aria-current={location === item.href ? "page" : undefined}
+                    >
+                      {item.name}
+                    </Link>
+                  </motion.div>
+                ))}
+                <motion.div
+                  variants={
+                    prefersReducedMotion
+                      ? {}
+                      : {
+                          open: {
+                            y: 0,
+                            opacity: 1,
+                            transition: {
+                              y: { stiffness: 1000, velocity: -100 },
+                            },
+                          },
+                          closed: {
+                            y: 20,
+                            opacity: 0,
+                            transition: {
+                              y: { stiffness: 1000 },
+                            },
+                          },
+                        }
+                  }
                 >
-                  {item.name}
-                </Link>
-              ))}
-              <Link href="/contact">
-                <Button size="sm" className="w-full">
-                  Get in Touch
-                </Button>
-              </Link>
-            </div>
-          </div>
-        )}
+                  <Link href="/contact">
+                    <Button size="sm" className="w-full">
+                      Get in Touch
+                    </Button>
+                  </Link>
+                </motion.div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </header>
     </>
   );

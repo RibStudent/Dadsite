@@ -227,7 +227,7 @@ export default function Contact() {
       </section>
 
       {/* Contact Form & Info */}
-      <section className="py-20 bg-white" aria-labelledby="contact-form-heading">
+      <section className="py-20 bg-background" aria-labelledby="contact-form-heading">
         <div className="container">
           <div className="grid md:grid-cols-3 gap-12">
             {/* Contact Form */}

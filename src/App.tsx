@@ -1,12 +1,16 @@
 import { lazy, Suspense } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { Route, Switch } from "wouter";
+import { Route, Switch, useLocation } from "wouter";
 import { HelmetProvider } from 'react-helmet-async';
+import { AnimatePresence, motion } from "framer-motion";
 import ErrorBoundary from "./components/ErrorBoundary";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import { ThemeProvider } from "./contexts/ThemeContext";
+import { LoadingFallbackEnhanced } from "./components/LoadingSkeletons";
+import { CustomCursor, ScrollProgressIndicator, SmoothScrollWrapper } from "./components/CustomCursor";
+import { pageTransitionVariants } from "./hooks/useAnimations";
 
 // Lazy load page components for code splitting
 const HomeEnhanced = lazy(() => import("./pages/HomeEnhanced"));
@@ -20,52 +24,113 @@ const LegacyCaseStudies = Projects;
 const Contact = lazy(() => import("./pages/Contact"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
 
-// Loading fallback component
-function LoadingFallback() {
+/**
+ * PageWrapper - Wraps each page with animation variants
+ */
+function PageWrapper({ children }: { children: React.ReactNode }) {
+  const variants = pageTransitionVariants();
+
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      <div className="text-center">
-        <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-primary border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]" role="status">
-          <span className="sr-only">Loading...</span>
-        </div>
-        <p className="mt-4 text-muted-foreground">Loading...</p>
-      </div>
-    </div>
+    <motion.div
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      variants={variants}
+    >
+      {children}
+    </motion.div>
   );
 }
 
+/**
+ * Router - Enhanced with page transitions
+ */
 function Router() {
+  const [location] = useLocation();
+
   return (
     <>
+      <ScrollProgressIndicator />
       <Header />
-      <Suspense fallback={<LoadingFallback />}>
-        <Switch>
-          <Route path={"/"} component={HomeEnhanced} />
-          <Route path={"/about"} component={About} />
-          <Route path={"/career-highlights"} component={CareerHighlights} />
-          <Route path={"/services"} component={Services} />
-          <Route path={"/projects"} component={Projects} />
-          <Route path={"/case-studies"} component={LegacyCaseStudies} />
-          <Route path={"/contact"} component={Contact} />
-          <Route path={"/404"} component={NotFound} />
-          {/* Final fallback route */}
-          <Route component={NotFound} />
-        </Switch>
-      </Suspense>
+      <AnimatePresence mode="wait">
+        <Suspense fallback={<LoadingFallbackEnhanced />} key={location}>
+          <Switch location={location}>
+            <Route path={"/"}>
+              <PageWrapper>
+                <HomeEnhanced />
+              </PageWrapper>
+            </Route>
+            <Route path={"/about"}>
+              <PageWrapper>
+                <About />
+              </PageWrapper>
+            </Route>
+            <Route path={"/career-highlights"}>
+              <PageWrapper>
+                <CareerHighlights />
+              </PageWrapper>
+            </Route>
+            <Route path={"/services"}>
+              <PageWrapper>
+                <Services />
+              </PageWrapper>
+            </Route>
+            <Route path={"/projects"}>
+              <PageWrapper>
+                <Projects />
+              </PageWrapper>
+            </Route>
+            <Route path={"/case-studies"}>
+              <PageWrapper>
+                <LegacyCaseStudies />
+              </PageWrapper>
+            </Route>
+            <Route path={"/contact"}>
+              <PageWrapper>
+                <Contact />
+              </PageWrapper>
+            </Route>
+            <Route path={"/404"}>
+              <PageWrapper>
+                <NotFound />
+              </PageWrapper>
+            </Route>
+            <Route>
+              <PageWrapper>
+                <NotFound />
+              </PageWrapper>
+            </Route>
+          </Switch>
+        </Suspense>
+      </AnimatePresence>
       <Footer />
     </>
   );
 }
 
+/**
+ * Enhanced App with animations and premium features
+ *
+ * New Features:
+ * - Custom cursor with smooth following
+ * - Scroll progress indicator
+ * - Smooth scroll behavior
+ * - Page transitions with AnimatePresence
+ * - Enhanced loading skeletons
+ * - Improved error boundaries
+ */
 function App() {
   return (
     <ErrorBoundary>
       <HelmetProvider>
         <ThemeProvider>
-          <TooltipProvider>
-            <Toaster />
-            <Router />
-          </TooltipProvider>
+          <SmoothScrollWrapper>
+            <TooltipProvider>
+              <CustomCursor />
+              <Toaster />
+              <Router />
+            </TooltipProvider>
+          </SmoothScrollWrapper>
         </ThemeProvider>
       </HelmetProvider>
     </ErrorBoundary>

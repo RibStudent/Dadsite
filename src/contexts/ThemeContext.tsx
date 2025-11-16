@@ -9,19 +9,41 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
+/**
+ * ThemeProvider - Manages light/dark theme with smooth transitions
+ *
+ * Features:
+ * - Persists theme to localStorage
+ * - Respects user's saved preference
+ * - Falls back to system preference if no saved theme
+ * - Smooth transitions with CSS
+ */
 export function ThemeProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
   const [theme, setTheme] = useState<Theme>(() => {
-    // Always force dark theme
-    localStorage.setItem("theme", "dark");
-    return "dark";
+    // Check localStorage first
+    const savedTheme = localStorage.getItem("theme") as Theme | null;
+    if (savedTheme === "light" || savedTheme === "dark") {
+      return savedTheme;
+    }
+
+    // Fall back to system preference
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      return "dark";
+    }
+
+    return "dark"; // Default to dark
   });
 
   useEffect(() => {
     const root = window.document.documentElement;
+
+    // Add transition class for smooth theme changes
+    root.style.setProperty('--theme-transition-duration', '200ms');
+
     root.classList.remove("light", "dark");
     root.classList.add(theme);
     localStorage.setItem("theme", theme);
